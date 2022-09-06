@@ -13,7 +13,6 @@
       type="module"
       src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"
     ></script>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
     
     <model-viewer
@@ -28,7 +27,6 @@
       src="./old_rusty_car_2/AR_Car_Android11.glb"
       alt="An animated 3D model of a robot"
       camera-orbit="54deg 75deg auto"
-      auto-rotate
       ar-modes="webxr scene-viewer quick-look"
       scale = "-1 1 -1"
     >
@@ -96,37 +94,64 @@
       }
 
       // ========= endTargetFrameAnimation ==========
-      function StartAndStopAnimationAtTargetFrame(startCurrent,stopCurrent,isToward){
-      if(isToward)
+
+      async function StartAndStopAnimationAtTargetFrame(startCurrent,stopCurrent){
+      // console.log("startCurrent :" + startCurrent + "{}" +"stopCurrent:" + stopCurrent)
+      isPlayAnimation = true;
+      const result = await checkAnimationShouldForward(startCurrent,stopCurrent);
+      startAnimation(result,startCurrent,stopCurrent);
+      }
+
+      function checkAnimationShouldForward(startC,stopC)
+      {
+        return new Promise((resolve, reject) => {
+          setTimeout(() => {
+            var isForwarAnimation;
+      if(startC < stopC)
       {
         console.log("foward");
-        modelViewer.currentTime = startCurrent;
-        modelViewer.timeScale = 1;
+        isForwarAnimation = true;
       }
       else
       {
         console.log("backward");
-        modelViewer.currentTime = stopCurrent;
-        modelViewer.timeScale = -1;
+        isForwarAnimation = false;
       }
-      playAnimation();
+            resolve(isForwarAnimation)
+            modelViewer.currentTime = startC;
+          }, 2000)
+      })
+      }
+      
+      function startAnimation(isForward,startC,stopC)
+      {
+        if(isForward)
+        {
+          modelViewer.timeScale = 1;
+          console.log("modelViewer.timeScale:" + modelViewer.timeScale);
+        }
+        else
+        {
+          modelViewer.timeScale = -1;
+          console.log("modelViewer.timeScale:" + modelViewer.timeScale);
+        }
+        playAnimation();
         var timerInterval = window.setInterval(() =>{
-          isPlayAnimation = true;
           // console.log(modelViewer.currentTime);
           // console.log("startCurrent :" + startCurrent);
-          if(isToward)
+          if(isForward)
           {
-            if((modelViewer.currentTime > stopCurrent ))
+            if((modelViewer.currentTime > stopC ))
             {
               clearInterval(timerInterval);
               pauseAnimation();
               isPlayAnimation = false;
-              console.log("stop foward01");
+              console.log("stop foward");
             }
           }
-          if(!isToward)
+          else
           {
-            if((modelViewer.currentTime < startCurrent ))
+            if((modelViewer.currentTime < stopC ))
             {
               clearInterval(timerInterval);
               pauseAnimation();
@@ -137,13 +162,9 @@
         }
         , 60);
       }
-      // function changeAnimation() {
-      //   modelViewer.animationName =
-      //     modelViewer.animationName === "Running" ? "Wave" : "Running";
-      // }
+
       function pauseAnimation() {
         modelViewer.pause();
-        console.log("pause");
       }
 
       function playAnimation() {
@@ -151,16 +172,15 @@
       }
 
       function playAnimtionFirst() {
-        // modelViewer.currentTime = 0;
       if(!isPlayAnimation)
       {
-        if(!isFirstAnimationActive )
+        if(!isFirstAnimationActive)
         {
-          StartAndStopAnimationAtTargetFrame(0.5,2,true);
+          StartAndStopAnimationAtTargetFrame(0.5,2);
         }
         else
         {
-          StartAndStopAnimationAtTargetFrame(0.5,2,false);
+          StartAndStopAnimationAtTargetFrame(2,0.5);
         }
         isFirstAnimationActive = !isFirstAnimationActive;
       }
@@ -168,24 +188,15 @@
       
       function playAnimtionSecond()
       {
-        // modelViewer.animationName = "Running";
-        // console.log(modelViewer.currentTime/modelViewer.duration);
-        // modelViewer.currentTime = 3 ;
-        // modelViewer.play();
         if(!isPlayAnimation)
         {
         if(!isSecondAnimationActive )
         {
-          StartAndStopAnimationAtTargetFrame(3,4.25,true);
-          console.log("play animation02");
+          StartAndStopAnimationAtTargetFrame(3,4.25);
         }
-        else
-        {
-          StartAndStopAnimationAtTargetFrame(3,4.25,false);
-        }
-        isSecondAnimationActive = !isSecondAnimationActive;
       }
       }
+
       function hideButton()
       {
         const buttonToggle1 = document.getElementById("buttonToggle1");
