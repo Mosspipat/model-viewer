@@ -15,50 +15,7 @@
     ></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
-    <!-- model-01 -->
-    <!-- <model-viewer src="./old_rusty_car_2/scene.gltf"></model-viewer> -->
-    <!-- model-02 -->
-    <!-- <model-viewer
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      camera-controls
-      touch-action="pan-y"
-      src="/old_rusty_car_2/scene.gltf"
-      alt="A 3D model of an astronaut"
-    >
-      <button
-        slot="ar-button"
-        style="
-          background-color: white;
-          border-radius: 4px;
-          border: none;
-          position: absolute;
-          top: 16px;
-          right: 16px;
-        "
-      >
-        👋 Activate AR
-      </button>
-    </model-viewer> -->
-    <!-- model-03 -->
-    <!-- <model-viewer
-      src="./old_rusty_car_2/scene.gltf"
-      ar
-      ar-modes="webxr scene-viewer quick-look"
-      camera-controls
-      poster="poster.webp"
-      shadow-intensity="1"
-      autoplay
-    >
-    <div class="progress-bar hide" slot="progress-bar">
-        <div class="update-bar"></div>
-      </div>
-      <button slot="ar-button" id="ar-button">View in your space</button>
-       <div id="ar-prompt">
-        <img src="https://modelviewer.dev/shared-assets/icons/hand.png" />
-    </div> 
-    </model-viewer> -->
-    <!-- model-04 -->
+    
     <model-viewer
       class="model-style"
       style="width: 100vw; height: 100vh; overflow: hidden;"
@@ -73,13 +30,14 @@
       camera-orbit="54deg 75deg auto"
       auto-rotate
       ar-modes="webxr scene-viewer quick-look"
+      scale = "-1 1 -1"
     >
     <button 
     id="buttonToggle1"
     class="Hotspot button-style1"
     onclick="playAnimtionFirst()"
     slot="hotspot-1" 
-    data-position="0.25m 0.15m 0m" 
+    data-position="0.18m 0.15m 0.25m" 
     data-normal="2m 20m 20m" 
     data-visibility-attribute="visible">
     <img class="image-style" src="./Play-Button.png"></img>
@@ -91,7 +49,7 @@
     class="Hotspot button-style1"
     onclick="playAnimtionSecond()"
     slot="hotspot-2" 
-    data-position="-0.25m 0.15m 0m" 
+    data-position="-0.18m 0.15m 0m" 
     data-normal="2m 20m 20m" 
     data-visibility-attribute="visible">
     <img class="image-style" src="./Play-Button.png"></img>
@@ -103,7 +61,7 @@
     class="Hotspot button-style2"
     onclick="hideButton()"
     slot="hotspot-3" 
-    data-position="-0.25m 0.15m -0.25m" 
+    data-position="0m 0.325m 0m" 
     data-normal="2m 20m 20m" 
     data-visibility-attribute="visible">
     <img class="image-style" src="./UI.png"></img>
@@ -115,37 +73,118 @@
 
     <script>
       var isVisible = true;
+      var isFirstAnimationActive = false;
+      var isSecondAnimationActive = false;
+      var isPlayAnimation = false;
       const modelViewer = document.querySelector("model-viewer");
 
-      window.addEventListener("load",onLoadFunctions)
-
-      modelViewer.addEventListener("finished",onLoadFunctions)
-
+      //On window or broswer on start
+      window.addEventListener("load",onLoadFunctions);
 
       function onLoadFunctions()
       {
-        modelViewer.addEventListener('load', ()=> { modelViewer.pause();});
+        //on load or on start animation pause.
+        modelViewer.addEventListener('load', ()=> { 
+          pauseAnimation();
+
+        });
+        //on finish animation
+        // modelViewer.addEventListener("loop",()=>{
+        //   console.log("finsih animation")
+        //   pauseAnimation()
+        // });
       }
 
-      function changeAnimation() {
-        modelViewer.animationName =
-          modelViewer.animationName === "Running" ? "Wave" : "Running";
+      // ========= endTargetFrameAnimation ==========
+      function StartAndStopAnimationAtTargetFrame(startCurrent,stopCurrent,isToward){
+      if(isToward)
+      {
+        console.log("foward");
+        modelViewer.currentTime = startCurrent;
+        modelViewer.timeScale = 1;
       }
-      function stopAnimation() {
+      else
+      {
+        console.log("backward");
+        modelViewer.currentTime = stopCurrent;
+        modelViewer.timeScale = -1;
+      }
+      playAnimation();
+        var timerInterval = window.setInterval(() =>{
+          isPlayAnimation = true;
+          // console.log(modelViewer.currentTime);
+          // console.log("startCurrent :" + startCurrent);
+          if(isToward)
+          {
+            if((modelViewer.currentTime > stopCurrent ))
+            {
+              clearInterval(timerInterval);
+              pauseAnimation();
+              isPlayAnimation = false;
+              console.log("stop foward");
+            }
+          }
+          if(!isToward)
+          {
+            if((modelViewer.currentTime < startCurrent ))
+            {
+              clearInterval(timerInterval);
+              pauseAnimation();
+              isPlayAnimation = false;
+              console.log("stop backward");
+            }
+          }
+        }
+        , 60);
+      }
+      // function changeAnimation() {
+      //   modelViewer.animationName =
+      //     modelViewer.animationName === "Running" ? "Wave" : "Running";
+      // }
+      function pauseAnimation() {
         modelViewer.pause();
+        console.log("pause");
       }
-      function playAnimtionFirst() {
-        // modelViewer.currentTime = 0;
-        modelViewer.currentTime = 0 ;
+
+      function playAnimation() {
         modelViewer.play();
       }
+
+      function playAnimtionFirst() {
+        // modelViewer.currentTime = 0;
+      if(!isPlayAnimation)
+      {
+        if(!isFirstAnimationActive )
+        {
+          StartAndStopAnimationAtTargetFrame(0.5,2,true);
+        }
+        else
+        {
+          StartAndStopAnimationAtTargetFrame(0.5,2,false);
+        }
+        isFirstAnimationActive = !isFirstAnimationActive;
+      }
+    }
       
       function playAnimtionSecond()
       {
         // modelViewer.animationName = "Running";
         // console.log(modelViewer.currentTime/modelViewer.duration);
-        modelViewer.currentTime = 3 ;
-        modelViewer.play();
+        // modelViewer.currentTime = 3 ;
+        // modelViewer.play();
+        if(!isPlayAnimation)
+        {
+        if(!isSecondAnimationActive )
+        {
+          StartAndStopAnimationAtTargetFrame(3,4.25,true);
+          console.log("play animation02");
+        }
+        else
+        {
+          StartAndStopAnimationAtTargetFrame(3,4.25,false);
+        }
+        isSecondAnimationActive = !isSecondAnimationActive;
+      }
       }
       function hideButton()
       {
