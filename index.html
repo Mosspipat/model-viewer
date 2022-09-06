@@ -50,51 +50,124 @@
       shadow-intensity="1"
       autoplay
     >
-      <div class="progress-bar hide" slot="progress-bar">
+    <div class="progress-bar hide" slot="progress-bar">
         <div class="update-bar"></div>
       </div>
       <button slot="ar-button" id="ar-button">View in your space</button>
        <div id="ar-prompt">
         <img src="https://modelviewer.dev/shared-assets/icons/hand.png" />
-      </div> 
+    </div> 
     </model-viewer> -->
     <!-- model-04 -->
     <model-viewer
       class="model-style"
+      style="width: 100vw; height: 100vh; overflow: hidden;"
       camera-controls
       touch-action="pan-y"
       autoplay
       animation-name="Running"
       ar
       shadow-intensity="1"
-      src="./old_rusty_car_2/RobotExpressive.glb"
+      src="./old_rusty_car_2/AR_Car_Android11.glb"
       alt="An animated 3D model of a robot"
-    ></model-viewer>
+      camera-orbit="54deg 75deg auto"
+      auto-rotate
+      ar-modes="webxr scene-viewer quick-look"
+    >
+    <button 
+    id="buttonToggle1"
+    class="Hotspot button-style1"
+    onclick="playAnimtionFirst()"
+    slot="hotspot-1" 
+    data-position="0.25m 0.15m 0m" 
+    data-normal="2m 20m 20m" 
+    data-visibility-attribute="visible">
+    <img class="image-style" src="./Play-Button.png"></img>
+    <!-- <div class="HotspotAnnotation">animation1</div> -->
+    </button>
+
+    <button 
+    id="buttonToggle2"
+    class="Hotspot button-style1"
+    onclick="playAnimtionSecond()"
+    slot="hotspot-2" 
+    data-position="-0.25m 0.15m 0m" 
+    data-normal="2m 20m 20m" 
+    data-visibility-attribute="visible">
+    <img class="image-style" src="./Play-Button.png"></img>
+    <!-- <div class="HotspotAnnotation">animation2</div> -->
+    </button>
+
+    <button 
+    id="buttonToggle3"
+    class="Hotspot button-style2"
+    onclick="hideButton()"
+    slot="hotspot-3" 
+    data-position="-0.25m 0.15m -0.25m" 
+    data-normal="2m 20m 20m" 
+    data-visibility-attribute="visible">
+    <img class="image-style" src="./UI.png"></img>
+    <!-- <div class="HotspotAnnotation">hide</div> -->
+    </button>
+
+
+  </model-viewer>
+
     <script>
-      // (() => {
+      var isVisible = true;
       const modelViewer = document.querySelector("model-viewer");
-      console.log(modelViewer);
-      //     self.setInterval(() => {
-      //       modelViewer.animationName =
-      //         modelViewer.animationName === "Running" ? "Wave" : "Running";
-      //     }, 1500.0);
-      //   })();
+
+      window.addEventListener("load",onLoadFunctions)
+
+      modelViewer.addEventListener("finished",onLoadFunctions)
+
+
+      function onLoadFunctions()
+      {
+        modelViewer.addEventListener('load', ()=> { modelViewer.pause();});
+      }
 
       function changeAnimation() {
         modelViewer.animationName =
           modelViewer.animationName === "Running" ? "Wave" : "Running";
       }
-
       function stopAnimation() {
         modelViewer.pause();
       }
-      function playAnimation() {
+      function playAnimtionFirst() {
+        // modelViewer.currentTime = 0;
+        modelViewer.currentTime = 0 ;
         modelViewer.play();
       }
+      
+      function playAnimtionSecond()
+      {
+        // modelViewer.animationName = "Running";
+        // console.log(modelViewer.currentTime/modelViewer.duration);
+        modelViewer.currentTime = 3 ;
+        modelViewer.play();
+      }
+      function hideButton()
+      {
+        const buttonToggle1 = document.getElementById("buttonToggle1");
+        const buttonToggle2 = document.getElementById("buttonToggle2");
+        if(isVisible)
+        {
+          buttonToggle1.style.visibility = "hidden";
+          buttonToggle2.style.visibility = "hidden";
+          isVisible = false;
+        }
+        else
+        {
+          buttonToggle1.style.visibility = "visible";
+          buttonToggle2.style.visibility = "visible";
+          isVisible = true;
+        }
+        modelViewer.animationName = "Wave";
+      }
     </script>
-
-    <button onclick="changeAnimation()">change Animation</button>
+    <!-- <button onclick="changeAnimation()">change Animation</button>
     <button onclick="stopAnimation()">stop Animation</button>
-    <button onclick="playAnimation()">play Animation</button>
+    <button onclick="playAnimation()">play Animation</button> -->
   </body>
 </html>
