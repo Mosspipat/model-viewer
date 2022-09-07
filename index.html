@@ -92,36 +92,36 @@
 
       // ========= endTargetFrameAnimation ==========
       
-      function startForwardAnimation(startCurrent,stopCurrent)
+      function startAnimation(startCurrent,stopCurrent)
       {
+        var isAnimationforward  = startCurrent < stopCurrent ? true : false;
           modelViewer.currentTime = startCurrent;
-          modelViewer.play(); 
-          var extremelySmallIntervalTime = 0.05;
-          var j=0;
+          var extremelySmallIntervalTime = 0.01;
+          var currentFrame = startCurrent;
           const interval = setInterval(function(){ 
-            console.log(modelViewer.currentTime);
-            // check is over and loopback
-            // if(modelViewer.currentTime > 0 && modelViewer.currentTime < (extremelySmallIntervalTime - 0.01))
-            // { ++j;
-            //   //console.log(j);      
-            //   if ( j > 0 ){
-            //   modelViewer.pause();
-            //   // modelViewer.currentTime = 0;
-            //   j = 0;
-            //   clearInterval(interval);
-            //   }
-            // }
-                if(modelViewer.currentTime > stopCurrent)
-                {
-                  modelViewer.pause();
-                  clearInterval(interval);
-                }
-
-            // check if should start can play animation
-            if(modelViewer.currentTime == startCurrent)
+            if(isAnimationforward)
             {
-              modelViewer.play(); 
+              currentFrame += extremelySmallIntervalTime;
+              modelViewer.currentTime = currentFrame;
+              if(currentFrame >= stopCurrent)
+              {
+                clearInterval(interval);
+                modelViewer.currentTime = stopCurrent;
+              }
             }
+            else
+            {
+              currentFrame -= extremelySmallIntervalTime;
+              modelViewer.currentTime = currentFrame;
+              if(currentFrame <= stopCurrent)
+              {
+                clearInterval(interval);
+                modelViewer.currentTime = stopCurrent;
+              }
+            }
+            // else{
+            //   modelViewer.currentTime = currentFrame;
+            // }
           }, extremelySmallIntervalTime*1000);
       }
 
@@ -138,11 +138,11 @@
       {
         if(!isFirstAnimationActive)
         {
-          startAnimation(0,2);
+          startAnimation(0,2.5);
         }
         if(isFirstAnimationActive)
         {
-          startAnimation(2,0);
+          startAnimation(2.5,0);
         }
         isFirstAnimationActive = !isFirstAnimationActive;
       }
@@ -156,6 +156,11 @@
         {
           startAnimation(3,4.25);
         }
+        else
+        {
+          startAnimation(4.25,3);
+        }
+        isSecondAnimationActive = !isSecondAnimationActive
       }
       }
 
