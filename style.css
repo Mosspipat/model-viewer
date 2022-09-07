@@ -1,7 +1,30 @@
-.model-style {
-  width: 100%;
-  height: 500px;
+@media only screen and (min-width: 0px) {
+  .model-viewer-style{
+    padding-left: 0px;
+    width: 100%; 
+    min-height: 420px; 
+    overflow: hidden;
+  }
 }
+
+@media screen and (min-width: 769px) {
+  .model-viewer-style{
+    padding-left:0px;
+    width: 100%; 
+    min-height: 800px; 
+    overflow: hidden;
+} 
+}
+
+@media only screen and (min-width: 1080px) {
+  .model-viewer-style{
+    padding-left: 360px;
+    width: 100%; 
+    min-height: 800px; 
+    overflow: hidden;
+  }
+}
+
 
 .button-style1{
   /* width: 100px;

@@ -14,10 +14,8 @@
       src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"
     ></script>
 
-    
     <model-viewer
-      class="model-style"
-      style="width: 100vw; height: 100vh; overflow: hidden;"
+      class="model-viewer-style"
       camera-controls
       touch-action="pan-y"
       autoplay
@@ -26,16 +24,19 @@
       shadow-intensity="1"
       src="./old_rusty_car_2/AR_Car_Android11.glb"
       alt="An animated 3D model of a robot"
-      camera-orbit="54deg 75deg auto"
+      camera-orbit="20deg 75deg 0.85m"
       ar-modes="webxr scene-viewer quick-look"
       scale = "-1 1 -1"
+      min-camera-orbit="auto auto 0.85m" 
+      disable-zoom
+
     >
     <button 
     id="buttonToggle1"
     class="Hotspot button-style1"
     onclick="playAnimtionFirst()"
     slot="hotspot-1" 
-    data-position="0.18m 0.15m 0.25m" 
+    data-position="0.14m 0.17m 0.28m" 
     data-normal="2m 20m 20m" 
     data-visibility-attribute="visible">
     <img class="image-style" src="./Play-Button.png"></img>
@@ -47,7 +48,7 @@
     class="Hotspot button-style1"
     onclick="playAnimtionSecond()"
     slot="hotspot-2" 
-    data-position="-0.18m 0.15m 0m" 
+    data-position="-0.23m 0.15m 0m" 
     data-normal="2m 20m 20m" 
     data-visibility-attribute="visible">
     <img class="image-style" src="./Play-Button.png"></img>
@@ -65,8 +66,6 @@
     <img class="image-style" src="./UI.png"></img>
     <!-- <div class="HotspotAnnotation">hide</div> -->
     </button>
-
-
   </model-viewer>
 
     <script>
@@ -84,7 +83,6 @@
         //on load or on start animation pause.
         modelViewer.addEventListener('load', ()=> { 
           pauseAnimation();
-
         });
         //on finish animation
         // modelViewer.addEventListener("loop",()=>{
@@ -202,46 +200,45 @@
       {
         if(!isFirstAnimationActive)
         {
-          StartAndStopAnimationAtTargetFrame(3,5);
+          StartAndStopAnimationAtTargetFrame(1,2.5);
         }
-        else
-        {
-          StartAndStopAnimationAtTargetFrame(5,3);
-        }
-        isFirstAnimationActive = !isFirstAnimationActive;
+        // else
+        // {
+        //   StartAndStopAnimationAtTargetFrame(5,3);
+        // }
+        // isFirstAnimationActive = !isFirstAnimationActive;
       }
     }
       
       function playAnimtionSecond()
       {
-      //   if(!isPlayAnimation)
-      //   {
-      //   if(!isSecondAnimationActive )
-      //   {
-      //     StartAndStopAnimationAtTargetFrame(3,4.25);
-      //   }
-      // }
+        if(!isPlayAnimation)
+        {
+        if(!isSecondAnimationActive)
+        {
+          StartAndStopAnimationAtTargetFrame(3,4.25);
+        }
+      }
       }
 
       function hideButton()
       {
         isPlayAnimation = false;
         modelViewer.currentTime = 0;
-        // const buttonToggle1 = document.getElementById("buttonToggle1");
-        // const buttonToggle2 = document.getElementById("buttonToggle2");
-        // if(isVisible)
-        // {
-        //   buttonToggle1.style.visibility = "hidden";
-        //   buttonToggle2.style.visibility = "hidden";
-        //   isVisible = false;
-        // }
-        // else
-        // {
-        //   buttonToggle1.style.visibility = "visible";
-        //   buttonToggle2.style.visibility = "visible";
-        //   isVisible = true;
-        // }
-        // modelViewer.animationName = "Wave";
+        const buttonToggle1 = document.getElementById("buttonToggle1");
+        const buttonToggle2 = document.getElementById("buttonToggle2");
+        if(isVisible)
+        {
+          buttonToggle1.style.visibility = "hidden";
+          buttonToggle2.style.visibility = "hidden";
+          isVisible = false;
+        }
+        else
+        {
+          buttonToggle1.style.visibility = "visible";
+          buttonToggle2.style.visibility = "visible";
+          isVisible = true;
+        }
       }
     </script>
     <!-- <button onclick="changeAnimation()">change Animation</button>
