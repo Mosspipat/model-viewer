@@ -96,10 +96,61 @@
       // ========= endTargetFrameAnimation ==========
 
       async function StartAndStopAnimationAtTargetFrame(startCurrent,stopCurrent){
-      // console.log("startCurrent :" + startCurrent + "{}" +"stopCurrent:" + stopCurrent)
       isPlayAnimation = true;
-      const result = await checkAnimationShouldForward(startCurrent,stopCurrent);
-      startAnimation(result,startCurrent,stopCurrent);
+      var isFoward = false;
+      if(startCurrent < stopCurrent)
+          {
+            modelViewer.currentTime = startCurrent;
+            console.log("set :" + modelViewer.currentTime);
+            modelViewer.timeScale = 1;
+            isFoward  = true;
+            playAnimation();
+          }
+      else if(startCurrent > stopCurrent)
+          {
+            modelViewer.currentTime = startCurrent;
+            console.log("set :" + modelViewer.currentTime);
+            modelViewer.timeScale = -1;
+            isFoward = false;
+            playAnimation();
+          }
+          var timerInterval = window.setInterval(() =>{
+          console.log(modelViewer.currentTime);
+          // console.log("startCurrent :" + startCurrent);
+          
+          // clear animation and interval
+          if(modelViewer.currentTime <= 0.5)
+          {
+            clearInterval(timerInterval);
+            pauseAnimation();
+            modelViewer.currentTime = 0.51;
+            isPlayAnimation = false;
+          }
+
+          if(isFoward)
+          {
+            if(modelViewer.currentTime>stopCurrent)
+            {
+              pauseAnimation();
+              modelViewer.currentTime = stopCurrent;
+              isPlayAnimation = false;
+              clearInterval(timerInterval);
+            }
+          }
+          else
+          {
+            if(modelViewer.currentTime < stopCurrent)
+            {
+              pauseAnimation();
+              modelViewer.currentTime = stopCurrent;
+              isPlayAnimation = false;
+              clearInterval(timerInterval);
+            }
+          }
+        }
+        , 0);
+      // const result = await checkAnimationShouldForward(startCurrent,stopCurrent);
+      // startAnimation(result,startCurrent,stopCurrent);
       }
 
       function checkAnimationShouldForward(startC,stopC)
@@ -136,31 +187,6 @@
           console.log("modelViewer.timeScale:" + modelViewer.timeScale);
         }
         playAnimation();
-        var timerInterval = window.setInterval(() =>{
-          // console.log(modelViewer.currentTime);
-          // console.log("startCurrent :" + startCurrent);
-          if(isForward)
-          {
-            if((modelViewer.currentTime > stopC ))
-            {
-              clearInterval(timerInterval);
-              pauseAnimation();
-              isPlayAnimation = false;
-              console.log("stop foward");
-            }
-          }
-          else
-          {
-            if((modelViewer.currentTime < stopC ))
-            {
-              clearInterval(timerInterval);
-              pauseAnimation();
-              isPlayAnimation = false;
-              console.log("stop backward");
-            }
-          }
-        }
-        , 60);
       }
 
       function pauseAnimation() {
@@ -176,11 +202,11 @@
       {
         if(!isFirstAnimationActive)
         {
-          StartAndStopAnimationAtTargetFrame(0.5,2);
+          StartAndStopAnimationAtTargetFrame(3,5);
         }
         else
         {
-          StartAndStopAnimationAtTargetFrame(2,0.5);
+          StartAndStopAnimationAtTargetFrame(5,3);
         }
         isFirstAnimationActive = !isFirstAnimationActive;
       }
@@ -188,32 +214,34 @@
       
       function playAnimtionSecond()
       {
-        if(!isPlayAnimation)
-        {
-        if(!isSecondAnimationActive )
-        {
-          StartAndStopAnimationAtTargetFrame(3,4.25);
-        }
-      }
+      //   if(!isPlayAnimation)
+      //   {
+      //   if(!isSecondAnimationActive )
+      //   {
+      //     StartAndStopAnimationAtTargetFrame(3,4.25);
+      //   }
+      // }
       }
 
       function hideButton()
       {
-        const buttonToggle1 = document.getElementById("buttonToggle1");
-        const buttonToggle2 = document.getElementById("buttonToggle2");
-        if(isVisible)
-        {
-          buttonToggle1.style.visibility = "hidden";
-          buttonToggle2.style.visibility = "hidden";
-          isVisible = false;
-        }
-        else
-        {
-          buttonToggle1.style.visibility = "visible";
-          buttonToggle2.style.visibility = "visible";
-          isVisible = true;
-        }
-        modelViewer.animationName = "Wave";
+        isPlayAnimation = false;
+        modelViewer.currentTime = 0;
+        // const buttonToggle1 = document.getElementById("buttonToggle1");
+        // const buttonToggle2 = document.getElementById("buttonToggle2");
+        // if(isVisible)
+        // {
+        //   buttonToggle1.style.visibility = "hidden";
+        //   buttonToggle2.style.visibility = "hidden";
+        //   isVisible = false;
+        // }
+        // else
+        // {
+        //   buttonToggle1.style.visibility = "visible";
+        //   buttonToggle2.style.visibility = "visible";
+        //   isVisible = true;
+        // }
+        // modelViewer.animationName = "Wave";
       }
     </script>
     <!-- <button onclick="changeAnimation()">change Animation</button>
