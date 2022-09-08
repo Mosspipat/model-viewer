@@ -13,7 +13,6 @@
       type="module"
       src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"
     ></script>
-
     <model-viewer
       class="model-viewer-style"
       camera-controls
@@ -90,10 +89,10 @@
         // });
       }
 
-      // ========= endTargetFrameAnimation ==========
-      
+      // ========= playanimation with internal function ==========
       function startAnimation(startCurrent,stopCurrent)
       {
+        isPlayAnimation = true;
         var isAnimationforward  = startCurrent < stopCurrent ? true : false;
           modelViewer.currentTime = startCurrent;
           var extremelySmallIntervalTime = 0.01;
@@ -101,27 +100,27 @@
           const interval = setInterval(function(){ 
             if(isAnimationforward)
             {
-              currentFrame += extremelySmallIntervalTime;
+              currentFrame += 0.02;
               modelViewer.currentTime = currentFrame;
               if(currentFrame >= stopCurrent)
               {
                 clearInterval(interval);
                 modelViewer.currentTime = stopCurrent;
+                isPlayAnimation = false;
               }
             }
             else
             {
-              currentFrame -= extremelySmallIntervalTime;
+              currentFrame -= 0.02;
               modelViewer.currentTime = currentFrame;
               if(currentFrame <= stopCurrent)
               {
                 clearInterval(interval);
                 modelViewer.currentTime = stopCurrent;
+                isPlayAnimation = false;
               }
             }
-            // else{
-            //   modelViewer.currentTime = currentFrame;
-            // }
+            console.log("a");
           }, extremelySmallIntervalTime*1000);
       }
 
@@ -145,6 +144,9 @@
           startAnimation(2.5,0);
         }
         isFirstAnimationActive = !isFirstAnimationActive;
+
+        //----- reset other button to (DefaultkeyFrame or first frame again) [this is not important soulution ]-------
+        isSecondAnimationActive = false;
       }
     }
       
@@ -161,6 +163,9 @@
           startAnimation(4.25,3);
         }
         isSecondAnimationActive = !isSecondAnimationActive
+
+         //----- reset other button to (DefaultkeyFrame or first frame again) [this is not important soulution ]-------
+        isFirstAnimationActive = false;
       }
       }
 
@@ -184,8 +189,6 @@
         }
       }
     </script>
-    <!-- <button onclick="changeAnimation()">change Animation</button>
-    <button onclick="stopAnimation()">stop Animation</button>
-    <button onclick="playAnimation()">play Animation</button> -->
+   
   </body>
 </html>
