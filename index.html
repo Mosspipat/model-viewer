@@ -28,10 +28,11 @@
       scale = "-1 1 -1"
       min-camera-orbit="auto auto 0.85m" 
       disable-zoom
-
+      poster = "/download.png"
     >
     <button 
     id="buttonToggle1"
+    style="visibility: hidden;"
     class="Hotspot button-style1"
     onclick="playAnimtionFirst()"
     slot="hotspot-1" 
@@ -44,6 +45,7 @@
 
     <button 
     id="buttonToggle2"
+    style="visibility: hidden;"
     class="Hotspot button-style1"
     onclick="playAnimtionSecond()"
     slot="hotspot-2" 
@@ -56,6 +58,7 @@
 
     <button 
     id="buttonToggle3"
+    style="visibility: hidden;"
     class="Hotspot button-style2"
     onclick="hideButton()"
     slot="hotspot-3" 
@@ -78,9 +81,11 @@
 
       function onLoadFunctions()
       {
+        hiddenImageButton();
         //on load or on start animation pause.
         modelViewer.addEventListener('load', ()=> { 
           pauseAnimation();
+          showImageButton();
         });
         //on finish animation
         // modelViewer.addEventListener("loop",()=>{
@@ -187,6 +192,19 @@
           buttonToggle2.style.visibility = "visible";
           isVisible = true;
         }
+      }
+
+      // === preloadModel ===
+      function hiddenImageButton()
+      {
+          var buttons = document.querySelectorAll("button");
+          buttons.forEach(element => element.style.visibility = "hidden");
+      }
+
+      function showImageButton()
+      { 
+        var buttons = document.querySelectorAll("button");
+        buttons.forEach(element => element.style.visibility = "visible");
       }
     </script>
    
