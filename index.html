@@ -13,8 +13,18 @@
       type="module"
       src="https://unpkg.com/@google/model-viewer/dist/model-viewer.js"
     ></script>
+
+
+    <div class="previewContainer">
+      <div class="previewImgageContainer">
+        <img id="imgPreview" src="./src/logo-img.png"
+        style="opacity: 1; width: 240px; height: 240px; object-fit: cover;">
+        <img id="imgPreview" src="./src/load_icon.gif"
+        style="opacity: 1; width: 50px; height: 50px; object-fit: cover;">
+      </div>
     <model-viewer
-      class="model-viewer-style"
+      id="modelViewerComponent"
+      class="model-viewer-style hide-model-viewer "
       camera-controls
       touch-action="pan-y"
       autoplay
@@ -22,15 +32,15 @@
       ar
       shadow-intensity="1"
       src="./old_rusty_car_2/AR_Car_Android11.glb"
-      alt="An animated 3D model of a robot"
-      camera-orbit="20deg 75deg 0.85m"
+      alt="An animated 3D model of a car"
+      camera-orbit="20deg 80deg 1.25m"
       ar-modes="webxr scene-viewer quick-look"
       scale = "-1 1 -1"
-      min-camera-orbit="auto auto 0.85m" 
+      min-camera-orbit="auto auto 1.25m" 
       disable-zoom
-      poster = "https://viz.studio/wp-content/model-viwer-demo-17/video.gif"
       loading="eager"
     >
+    
     <button 
     id="buttonToggle1"
     style="visibility: hidden;"
@@ -40,7 +50,7 @@
     data-position="0.14m 0.17m 0.28m" 
     data-normal="2m 20m 20m" 
     data-visibility-attribute="visible">
-    <img class="image-style" src="./Play-Button.png"></img>
+    <img class="image-style" src="./src/Play-Button.png"></img>
     <!-- <div class="HotspotAnnotation">animation1</div> -->
     </button>
 
@@ -53,7 +63,7 @@
     data-position="-0.23m 0.15m 0m" 
     data-normal="2m 20m 20m" 
     data-visibility-attribute="visible">
-    <img class="image-style" src="./Play-Button.png"></img>
+    <img class="image-style" src="./src/Play-Button.png"></img>
     <!-- <div class="HotspotAnnotation">animation2</div> -->
     </button>
 
@@ -66,10 +76,12 @@
     data-position="0m 0.325m 0m" 
     data-normal="2m 20m 20m" 
     data-visibility-attribute="visible">
-    <img class="image-style" src="./UI.png"></img>
+    <img class="image-style" src="./src/UI.png"></img>
     <!-- <div class="HotspotAnnotation">hide</div> -->
     </button>
-  </model-viewer>
+    </model-viewer>
+  </div>
+
     <script>
       var isVisible = true;
       var isFirstAnimationActive = false;
@@ -87,6 +99,7 @@
         modelViewer.addEventListener('load', ()=> { 
           pauseAnimation();
           showImageButton();
+          ShowModelViewer();
         });
         //on finish animation
         // modelViewer.addEventListener("loop",()=>{
@@ -196,6 +209,23 @@
       }
 
       // === preloadModel ===
+      // model-viewer onload
+      function HideModelViewer()
+      {
+       //to do
+      }
+
+      function ShowModelViewer()
+      {
+        //show modelviewer
+        var modelViewerElem = document.querySelector("#modelViewerComponent");
+        modelViewerElem.classList.remove("hide-model-viewer");
+        modelViewerElem.classList.add("show-model-viewer");
+        //hide image preview
+        var modelViewerElem = document.querySelector(".previewImgageContainer");
+        modelViewerElem.style.display = "none";
+      }
+      // buttonIcon 
       function hiddenImageButton()
       {
           var buttons = document.querySelectorAll("button");

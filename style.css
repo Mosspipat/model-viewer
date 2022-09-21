@@ -15,6 +15,15 @@ model-viewer {
   width: 100%;
 }
 
+.hide-model-viewer{
+  display: none;
+}
+
+.show-model-viewer{
+  display: block;
+}
+
+/* === button === */
 .button-style1 {
   /* width: 100px;
   height: 100px;
@@ -25,6 +34,34 @@ model-viewer {
   border-color: transparent;
   background-color: transparent;
   transform: translateY(4px);
+}
+
+/* === preview image === */
+.previewContainer
+{
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
+height: 100%;
+width: 100%;
+}
+
+.previewImgageContainer
+{
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.previewImgageContainerHide
+{
+  display: none;
 }
 
 .button-style2 {
